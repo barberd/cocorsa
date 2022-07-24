@@ -1,0 +1,6 @@
+Routines in this subdirectory are originally copyright 1985 by Leventhal and Cordes and 1989 McGraw-Hill Book Company (UK) Limited.
+
+Book archive available at https://archive.org/details/assembly-language-subroutines-for-the-6809_Leventhal
+Refer to the preface for intended licensing.
+
+Minor modifications for passing 16 bit sizes by Don Barber in 2022.

@@ -7,7 +7,7 @@ This is a program for the Tandy / Radio-Shack TRS-80 Color Computer to perform R
 
 It should work on any CoCo with at least 32kb of memory. 16k CoCos should work for smaller keysizes.
 
-The Color Computer was an 8 bit computer sold from 1980 through 1991. For more information about the Color Computer, see https://en.wikipedia.org/wiki/TRS-80_Color_Computer and https://www.cocopedia.com/wiki/index.php/Main_Page.
+The Color Computer is an 8 bit computer sold from 1980 through 1991. For more information about the Color Computer, see https://en.wikipedia.org/wiki/TRS-80_Color_Computer and https://www.cocopedia.com/wiki/index.php/Main_Page.
 
 ## Source
 
@@ -101,10 +101,12 @@ The program can also save encrypted and decrypted messages to a new file.
 
 ## Execution Time
 
+Some emulators allow one to speed up execution; for example see the '-nothrottle' option for MAME.
+
 ### Key Generation
 Generating smaller keys like 32 bits can be done in only seconds or minutes, but aren't very useful. On average, generating a 1024 bit key takes about 8 days on a Color Computer 3, and a 2048 bit key takes about a month...but could take twice as long if one gets unlucky. The reason for this is that the distribution of prime numbers is less frequent for higher ranges, so more numbers needed to be tested to find one for larger keys. Larger numbers also take longer to test for primality.
 
-Conceptually key generation would take about twice as long on a CoCo 1 or Coco 2, as these machines do not have the speed poke to double the CPU clock speed.
+Conceptually key generation would take about twice as long on a CoCo 1 or Coco 2, as these machines do not have a pragmatic speed poke to double the CPU clock speed.
 
 If one wants to use larger keys and doesn't want to wait to generate one on the CoCo, one can generate it using another RSA tool on a modern PC and load it onto the disk image. For example:
 
@@ -120,7 +122,7 @@ Encryption is relatively fast, with 2048-bit messages only taking a few minutes 
 
 The program uses the 'Chinese Remainer Theorem' method to speed up decryption compared to original RSA.
 
-However, decryption still takes noticeably longer than encryption as the private exponents are very large compared to the public exponent. Messages encrypted with 2048-bit keys takes over a day to decrypt on an original hardware CoCo. Some emulators allow one to speed up execution; for example see the '-nothrottle' option for MAME.
+However, decryption still takes noticeably longer than encryption as the private exponents are very large compared to the public exponent. Messages encrypted with 2048-bit keys takes over a day to decrypt on an original hardware CoCo. 
 
 ## Building
 

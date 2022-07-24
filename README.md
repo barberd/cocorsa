@@ -1,9 +1,16 @@
 
 # RSA For Color Computer
 
+## Description
+
+This is a program for the Tandy / Radio-Shack TRS-80 Color Computer to perform RSA key generation, encryption, and decryption. The code is all written in 6809 assembly. It will operate with up to 2048 bit keys.
+
+The Color Computer was an 8 bit computer sold from 1980 through 1991. For more information about the Color Computer, see https://en.wikipedia.org/wiki/TRS-80_Color_Computer and https://www.cocopedia.com/wiki/index.php/Main_Page.
+
 ## Source
 
 Code maintained at https://github.com/barberd/cocorsa
+
 
 ## Screenshots
 
@@ -23,26 +30,25 @@ Why create a RSA program for the Color Computer?
 
 When I was a kid I had a CoCo3; I learned BASIC on it. I always told myself I'd learn to program it properly with 'Machine Language' one day. 
 
-I did learn x86 assembly back in college and have picked up some other chipsets like ARM and 68k since then. But I always had a soft spot in my heart for the CoCo. So, 30 years later, I figured it was about time to actually prove to myself I could do something significant on it and its 6809 chip. Not sure how I got it in my head to implement RSA, but it was a decent challenge and seemed to fit the bill.
+I did learn x86 assembly back in college and have picked up some other chipsets like ARM and 68k since then. But I always had a soft spot in my heart for the CoCo. So, 30 years later, I figured it was about time to actually do something non-trivial on it and its 6809 chip. Not sure how I got it in my head to implement RSA, but it was a decent challenge and seemed to fit the bill.
 
-The first challenge was managing multi-byte algorithms. Leventhal has some examples in his book (see the src/leventhal directory), but I needed to also write new subroutines for modular exponentiation and GCD to do RSA. Of course, I needed to generate the keys too, so that required diving into random number generation and testing for primality with the Miller-Rabin method. After getting generation, encryption, and decryption working I moved on to doing it more efficiently, dusting off those computer science skills, such as implementing Karatsuba for multiplication, the RTL method for modular exponentiation, and a modulus (remainder) function thats slightly faster since it doesn't need to track the quotient.
+The first challenge was managing multi-byte algorithms. Leventhal has some examples in his book (see the src/leventhal directory), but I needed to also write new subroutines for modular exponentiation and GCD to do RSA. I needed to generate the keys too, so that required diving into random number generation and testing for primality with the Miller-Rabin method. After getting generation, encryption, and decryption working I moved on to doing it more efficiently, dusting off those computer science skills, such as implementing Karatsuba for multiplication, the LTR method for modular exponentiation, and a modulus (remainder) function thats slightly faster since it doesn't need to retain the quotient.
 
-I made the assumption that the CoCo disk controller ROM would have user subroutines for loading and saving files, much like the original 1984 Mac ROMs. But this is not the case. One can do a crazy hack to patch into the disk basic routines (and major props to those programmers who do this), but I found this to be very brittle and any error (like a mistyped filename) will dump the user back into disk basic unless one also patches all the basic error handlers. So, in order to save and load the key and data files, I wrote my own disk IO routines for implementing the CoCo floppy filesystem, as I couldn't find any open source subroutines out there for such. This may be the most useful portion for other CoCo developers; find it in src/sub/DSKIO.s. It provides an interface that should be somewhat familiar to those who've done file access with UNIX libc / Linux glibc.
+I originally made the false assumption that the CoCo disk controller ROM would have user subroutines for loading and saving files, much like the original 1984 Mac ROMs. But this is not the case. One can do a crazy hack to patch into the disk basic routines (and major props to those programmers who do this), but I found this to be very brittle and any error (like a mistyped filename) will dump the user back into disk basic unless one also patches all the basic error handlers. So, in order to save and load the key and data files, I wrote my own disk IO routines for implementing the CoCo floppy filesystem. This may be the most useful portion for other CoCo developers; find it in src/sub/DSKIO.s. It provides an interface that should be somewhat familiar to those who've done file access with UNIX libc / Linux glibc-type functions.
 
 One may notice my assembly programming got better as things went along. When I look in some older sections I see plenty of room for improvements...pull requests welcome.
 
-But, I did focus on implementing more efficient algorithms where I could. For example, the Chinese Remainer Theorem method of decryption, using Karatsuba for multiplication, and Miller-Rabin for primality testing. As such, I'm somewhat confident saying this is just about as fast as a CoCo can get doing RSA.
+But, I did focus on implementing more efficient algorithms where I could. For example, the Chinese Remainer Theorem method of decryption, using Karatsuba for multiplication, and Miller-Rabin for primality testing. As such, I'm somewhat confident saying this is just about as fast as a CoCo can get doing RSA. Which is not that fast at all (the CPU is only .89 mhz / 1.79 mhz on the Coco3) - see the Execution Time section below.
 
 Note the multiple-precision byte arrays are least-significant-byte first. This is simply because thats how Leventhal did it in his book (see the src/leventhal directory), and I extended my algorithm implementations from his examples.
-
 
 ## Executables
 
 RSA.BIN is a RSA key generator and will encrypt and decrypt messages.
 
-It will generate primes using a pseudorandom number generator and the Miller-Rabin primality test, then calculates the appropriate parts of the public and private keys. The keys are saved on disk, defaulting to PUBKEY.DER and PRIVKEY.DER. It then provides the option to encrypt a message, encrypt a file, or decrypt a file. For the latter, it allows displaying the decrypted message (useful for text) or saving it to disk (useful for binary data). There is also an option to load a public or private key from disk into memory. One can also copy the private key in memory to the public key in memory; do this if you want to send a message to yourself.
+It will generate primes using a pseudorandom number generator using user keyboard input delays to provide better randomness and the Miller-Rabin primality test, then calculates the appropriate parts of the public and private keys. The keys are saved on disk, defaulting to PUBKEY.DER and PRIVKEY.DER. It then provides the option to encrypt a message, encrypt a file, or decrypt a file. For the latter, it allows displaying the decrypted message (useful for text) or saving it to disk (useful for binary data). There is also an option to load a public or private key from disk into memory. One can also copy the private key in memory to the public key in memory; do this if you want to send a message to yourself.
 
-TSTDSK.BIN, TSTPR.BIN, TSTEXP.BIN, and TSTMUL.BIN are small stub programs just to test the disk routines, primage, modular exponentiation, and multiplication subroutines. I used them while debugging the algorithm implementations. Build these programs with 'make tests'.
+TST\*.BIN, are small stub programs just to test out various subroutines as I debugged the algorithm implementations. Build these programs with 'make tests'.
 
 ## Implementation Notes
 
@@ -115,6 +121,8 @@ The program uses the 'Chinese Remainer Theorem' method to speed up decryption co
 However, decryption still takes noticeably longer than encryption as the private exponents are very large compared to the public exponent. Messages encrypted with 2048-bit keys takes over a day to decrypt on an original CoCo.
 
 ## Building
+
+I used lwtools (http://www.lwtools.ca/) for my assembler and toolshed (https://sourceforge.net/projects/toolshed/) for manipulating disk images. There is a Makefile to help build using gnu make. Install these three packages to build the software.
 
 Run 'make' to build RSA.BIN and generate a rsa.dsk disk image.
 

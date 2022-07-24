@@ -5,6 +5,8 @@
 
 This is a program for the Tandy / Radio-Shack TRS-80 Color Computer to perform RSA key generation, encryption, and decryption. The code is all written in 6809 assembly. It will operate with up to 2048 bit keys.
 
+It should work on any CoCo with at least 32kb of memory. 16k CoCos should work for smaller keysizes.
+
 The Color Computer was an 8 bit computer sold from 1980 through 1991. For more information about the Color Computer, see https://en.wikipedia.org/wiki/TRS-80_Color_Computer and https://www.cocopedia.com/wiki/index.php/Main_Page.
 
 ## Source

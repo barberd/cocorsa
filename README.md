@@ -5,6 +5,14 @@
 
 Code maintained at https://github.com/barberd/cocorsa
 
+## Screenshots
+
+![Startup and Main Menu](screenshots/cocorsa-screenshot1.png?raw=true)
+
+
+![Key Generation](screenshots/cocorsa-screenshot2.png?raw=true)
+
+
 ## WARNING
 
 While I'm proud of the job I did here, its generally a horrible idea to implement your own cryptography, and this implementation of RSA has not been vetted by community/peer review. Please don't use it for anything serious.

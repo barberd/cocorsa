@@ -118,7 +118,7 @@ Encryption is relatively fast, with 2048-bit messages only taking a few minutes 
 
 The program uses the 'Chinese Remainer Theorem' method to speed up decryption compared to original RSA.
 
-However, decryption still takes noticeably longer than encryption as the private exponents are very large compared to the public exponent. Messages encrypted with 2048-bit keys takes over a day to decrypt on an original CoCo.
+However, decryption still takes noticeably longer than encryption as the private exponents are very large compared to the public exponent. Messages encrypted with 2048-bit keys takes over a day to decrypt on an original hardware CoCo. Some emulators allow one to speed up execution; for example see the '-nothrottle' option for MAME.
 
 ## Building
 

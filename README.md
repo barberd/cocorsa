@@ -46,7 +46,11 @@ Pseudo-random number generator uses a linear congruential generator (see below i
 
 Prime Generation uses a lookup table for small values and the Miller-Rabin test for larger values when testing for primality.
 
-Greatest Common Divisor and Modular Multiplicative Inverse (used when generating the private key) uses the Euclidean algorithm
+Greatest Common Divisor and Modular Multiplicative Inverse (used when generating the private key) uses the Euclidean algorithm.
+
+Modular Exponentiation uses right-to-left method (used for encryption and decryption).
+
+Modular Exponentiation uses right-to-left method (used for encryption and decryption).
 
 RSA Decryption uses the Chinese Remainder Theorem to speed up decryption.
 

@@ -42,11 +42,6 @@ start
 		CLRA
 		STA	coco3flag
 		STA	$FFD9		; set hi MPU speed
-		LDA	#$E0
-		STA	$FF22
-		STA	$FFC0
-		STA	$FFC2
-		STA	$FFC4
 notcoco3:
 
 		clr	PRIVKEYLOADED
@@ -2475,6 +2470,8 @@ DEFPUBKEYFNAME	fcn	"PUBKEY.DER"
 STRSTART	fcc	"     Color Computer RSA"
 		fcb	CR	
 		fcc	"Copyright (C) 2022 Don Barber"
+		fcb	CR
+		fcc	"https://github.com/barberd/cocorsa"
 		fcb	CR,CR
 		fcc	"THIS PROGRAM COMES WITH ABSOLUTELY NO WARRANTY."
 		fcb	CR,CR

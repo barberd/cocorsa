@@ -19,9 +19,9 @@ I did learn x86 assembly back in college and have picked up some other chipsets 
 
 The first challenge was managing multi-byte algorithms. Leventhal has some examples in his book (see the src/leventhal directory), but I needed to also write new subroutines for modular exponentiation and GCD to do RSA. Of course, I needed to generate the keys too, so that required diving into random number generation and testing for primality with the Miller-Rabin method. After getting generation, encryption, and decryption working I moved on to doing it more efficiently, dusting off those computer science skills, such as implementing Karatsuba for multiplication, the RTL method for modular exponentiation, and a modulus (remainder) function thats slightly faster since it doesn't need to track the quotient.
 
-I made the assumption that the CoCo disk controller ROM would have subroutines for loading and saving files, much like the original 1984 Mac ROMs. But this is not the case. One can do a crazy hack to patch into the disk basic routines, but it is very brittle and any error (like a mistyped filename) will dump the user back into disk basic. So, in order to save and load the key and data files, I wrote my own disk IO routines for implementing the CoCo floppy filesystem, as I couldn't find any open source subroutines out there for such. This may be the most useful portion for other CoCo developers; find it in src/sub/DSKIO.s. It provides an interface that should be somewhat familiar to those who've done file access with UNIX libc / Linux glibc.
+I made the assumption that the CoCo disk controller ROM would have user subroutines for loading and saving files, much like the original 1984 Mac ROMs. But this is not the case. One can do a crazy hack to patch into the disk basic routines (and major props to those programmers who do this), but I found this to be very brittle and any error (like a mistyped filename) will dump the user back into disk basic unless one also patches all the basic error handlers. So, in order to save and load the key and data files, I wrote my own disk IO routines for implementing the CoCo floppy filesystem, as I couldn't find any open source subroutines out there for such. This may be the most useful portion for other CoCo developers; find it in src/sub/DSKIO.s. It provides an interface that should be somewhat familiar to those who've done file access with UNIX libc / Linux glibc.
 
-One may notice my assembly programming got better as things went along. When I look in some older sections I see plenty of room for improvements...simple things like 'LEAU ,S" where "TFR S,U" would be better.
+One may notice my assembly programming got better as things went along. When I look in some older sections I see plenty of room for improvements...pull requests welcome.
 
 But, I did focus on implementing more efficient algorithms where I could. For example, the Chinese Remainer Theorem method of decryption, using Karatsuba for multiplication, and Miller-Rabin for primality testing. As such, I'm somewhat confident saying this is just about as fast as a CoCo can get doing RSA.
 
@@ -39,11 +39,17 @@ TSTDSK.BIN, TSTPR.BIN, TSTEXP.BIN, and TSTMUL.BIN are small stub programs just t
 ## Implementation Notes
 
 Multiplication uses the Karatsuba Algorithm
+
 Division and Modulus uses naive shift-and-subtract.
+
 Pseudo-random number generator uses a linear congruential generator (see below in improvement ideas).
+
 Prime Generation uses a lookup table for small values and the Miller-Rabin test for larger values when testing for primality.
+
 Greatest Common Divisor and Modular Multiplicative Inverse (used when generating the private key) uses the Euclidean algorithm
+
 RSA Decryption uses the Chinese Remainder Theorem to speed up decryption.
+
 Some subroutines from Leventhal have been modified to either use null-terminated (C-style) strings instead of the original leading-size (Pascal-style) strings, or to allow for over 255 bytelength multi-byte numbers; see the src/leventhal directory.
 The disk routines are a new implementation written for this program; it provides a UNIX-ish fopen(), fwrite(), fread(), fseek(), ftell(), fstat(), and fclose() type interface for the CoCo.
 

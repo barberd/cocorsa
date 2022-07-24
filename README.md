@@ -69,6 +69,8 @@ This program only implements pure RSA. It does not do message padding, block-cha
 
 Write the rsa.dsk image to a floppy disk (see https://nitros9.sourceforge.io/wiki/index.php/Transferring_DSK_Images_to_Floppies), load it into your Color Computer emulator, mount it with Drivewire, or copy it to your SD card for use with the CocoSDC. 
 
+If you have a CoCo3 and a monitor that can handle 80-column text, optionally enter 'WIDTH80' first before execution.
+
 Once the disk is loaded into your Coco, load the executable with 
 
     LOADM"RSA" <enter>
@@ -77,8 +79,9 @@ and then execute it with
 
     EXEC <enter>.
 
-If you have a CoCo3 and a monitor that can handle 80-column text, enter 'WIDTH80' first before execution.
+### Online Emulator
 
+If you want to try this out but don't have a Color Computer or an emulator set up, download the rsa.dsk file and then use the XRoar online emulator at https://www.6809.org.uk/xroar/online/. Change the 'Machine' to a Coco 3, insert your downloaded rsa.dsk into drive 1, then do a hard reset. 
 
 ## Outputs
 

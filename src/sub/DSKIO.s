@@ -1336,7 +1336,7 @@ DSKLOADFAT
 	CLR	DSKERROR
 	PSHS	U,D
 	LDA	6,S
-	LDB	#74
+	LDB	#70
 	MUL
 	LDY	#FAT
 	LEAY	D,Y
@@ -1531,9 +1531,8 @@ DSKTURNOFFMOTORS
 	PULS	A,PC
 
 FAT		rmb	70*4 ; FAT buffer for four drives
-			      ; byte 0: is RAM copy dirty and needs written to 
-			      ; disk
-			      ; byte 1: how many files are open on this disk
+			      ; byte 0: how many files are open on this disk
+			      ; byte 1: unused
 			      ; byte 2: is this dirty and need flushed?
 			      ; bytes 3-70: mapping for 68 granules
 			      ; this is a copy of the bytes found in disk 

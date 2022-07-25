@@ -336,7 +336,7 @@ DSKFSEEK
 	LDX	3+5,S
 	CMPB	6,X	
 	BNE	dskfseekchanged	; so will avoid one compare
-	CMPA	6,X
+	CMPA	5,X
 	BNE	dskfseekchanged
 	JMP	dskfseeknotchanged
 dskfseekchanged:	

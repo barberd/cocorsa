@@ -44,6 +44,18 @@ start
 		STA	$FFD9		; set hi MPU speed
 notcoco3:
 
+		;test for 6309 here, put it in native mode if so
+		;Method from Nitros9 (GPL2 license) cputype command 
+		;https://sourceforge.net/p/nitros9/code/ci/default/tree/level1/cmds/cputype.asm
+		LDD	#$FFFF
+		STA	cpu6309flag
+		fdb	$104F		; clrd, execs as pseudo NOP ($10)
+					; and CLRA ($4F) on 6809
+		TSTB			; if 6309, this will be clear
+		BNE	not6309
+		STA	cpu6309flag
+		LDMD	#$01	
+not6309:
 		clr	PRIVKEYLOADED
 		clr	PUBKEYLOADED
 
@@ -101,6 +113,11 @@ fillrandloopdone
 		BNE	notcoco3again
 		clr	$ffd8		; lower to standard(slow) MPU speed
 notcoco3again:
+		TST	cpu6309flag
+		BNE	not6309again
+		LDMD	#0
+not6309again:
+
 		JMP     $A027           ; Restart BASIC
 		;clr	$0071
 		;clr	$0072
@@ -2555,6 +2572,7 @@ primestat	rmd	1
 pubheader		fcb	$30,$0d,$06,$09,$2a,$86,$48,$86,$f7,$0d,$01,$01,$01,$05,$00
 pubheaderlength	SET	15
 coco3flag	rmb	1
+cpu6309flag	rmb	1
 
 		include sub/IO.s
 		include	sub/MPBREM.s

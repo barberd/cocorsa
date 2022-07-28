@@ -25,30 +25,30 @@ diskgen:
 	decb dskini $(TARGET)
 
 RSA.BIN: src/rsa.asm
-	lwasm -9 --decb -o $@ $<
+	lwasm --decb -o $@ $<
 
 TSTPR.BIN: src/tstpr.asm
-	lwasm -9 --decb -o $@ $<
+	lwasm --decb -o $@ $<
 
 TSTMUL.BIN: src/tstmul.asm
-	lwasm -9 --decb -o $@ $<
+	lwasm --decb -o $@ $<
 
 TSTDIV.BIN: src/tstdiv.asm
-	lwasm -9 --decb -o $@ $<
+	lwasm --decb -o $@ $<
 
 TSTREM.BIN: src/tstrem.asm
-	lwasm -9 --decb -o $@ $<
+	lwasm --decb -o $@ $<
 
 TSTSTK.BIN: src/tststk.asm
-	lwasm -9 --decb -o $@ $<
+	lwasm --decb -o $@ $<
 
 TSTEXP.BIN: src/tstexp.asm
-	lwasm -9 --decb -o $@ $<
+	lwasm --decb -o $@ $<
 
 TSTDSK.BIN: src/tstdsk.asm
-	lwasm -9 --decb -o $@ $<
+	lwasm --decb -o $@ $<
 
 TSTLIC.BIN: src/tstlic.asm
-	lwasm -9 --decb -o $@ $<
+	lwasm --decb -o $@ $<
 
 

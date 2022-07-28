@@ -13,6 +13,11 @@
 ; eg, make sure the disk basic rom in C000-DFFF is not overwritten or paged out
 ; as the DSKCON function is used
 
+; Note also that the DSKRWSEC routine checks a 'cpu6309flag'
+; If you are using this routine outside of Color Computer RSA
+; you'll need to handle this yourself
+; Perhaps with a 6309 check inside the DSKINIT routine to set the flag
+
 ; The file handler (or file control block, FCB) needs 267 bytes:
 			        ; 0: drive num
                                 ; 1: read (0) or write (1) 
@@ -72,7 +77,16 @@ DSKRWSEC
 	STA	DCSEC,X
 	LDD	1+2,S
 	STD	DCBPT,X
+	;return to emulation mode temporarily if running on a 6309
+	TST	cpu6309flag
+	BNE	dskrwsecnot6309
+	LDMD	#$0
 	JSR	[$C004]
+	LDMD	#$1
+	JMP	dskrwsecdonerw
+dskrwsecnot6309:
+	JSR	[$C004]
+dskrwsecdonerw:
 	LDA	DCSTA,X
 	STA	DSKERROR
 	PULS	B

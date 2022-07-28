@@ -54,6 +54,8 @@ TST\*.BIN, are small stub programs just to test out various subroutines as I deb
 
 ## Implementation Notes
 
+If a 6309 processor is detected, the program will put the processor in native mode. This results in approximately an 8% speedup.
+
 Multiplication uses the Karatsuba Algorithm
 
 Division and Modulus uses naive shift-and-subtract.
@@ -103,6 +105,8 @@ The program can also save encrypted and decrypted messages to a new file.
 
 Some emulators allow one to speed up execution; for example see the '-nothrottle' option for MAME.
 
+If a 6309 is detected, the processor is put into native mode (versus its default emulation mode) which will run many instructions faster than on a stock 6809. Anecdotal testing puts this at about an 8% increase in performance for decryption.
+
 ### Key Generation
 Generating smaller keys like 32 bits can be done in only seconds or minutes, but aren't very useful. On average, generating a 1024 bit key takes about 8 days on a Color Computer 3, and a 2048 bit key takes about a month...but could take twice as long if one gets unlucky. The reason for this is that the distribution of prime numbers is less frequent for higher ranges, so more numbers needed to be tested to find one for larger keys. Larger numbers also take longer to test for primality.
 
@@ -139,4 +143,6 @@ Conceptually the arithmetic subroutine codes could handle up to 2^16 bytelength 
 The random number generator is an old school linear congruential generator that on its own is not appropriate for cryptographic use. This is why user input is taken to make it more random. Perhaps it can be replaced with one that is cryptographically secure, such as a xorshift algorithm. See https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator. Or maybe just TinyMT, see https://en.wikipedia.org/wiki/Mersenne_Twister#TinyMT.
 
 Someone may choose to extend this into a full-blown encryption suite, supporting block-chaining (such as CBC, to allow for encrypting messages longer than the key), symmetric encryption (such as AES, to allow for faster encryption of files larger than the key when combined with block-chaining), and message padding (such as OAEP, to allow for messages shorter than the key and making some attacks harder). However, fitting all this into memory on a CoCo would be difficult, requiring some creative coordination to swap out segments to and from disk as needed.
+
+While the program does take advantage of the 6309 native mode if a 6309 is present, the algorithms have not been modified for the extra capabilities of the 6309 that could result in even more increased performance. The extra registers and all those beautiful instructions (like TFM!) could speed up some time-consuming portions of code, such as all the memory copying in the Miller-Rabin test and all the bit manipulation in modular exponentiation. The proper way to do this is likely to reimplement the algorithm(s) in a 6309 assembly version instead, include both versions in ifdef/ifndef conditions, and then produce separate 6809 and 6309 binaries.
 
